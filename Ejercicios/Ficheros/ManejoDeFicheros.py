@@ -1,0 +1,1 @@
+fichero = open('fichero.txt', "r",encoding = 'utf-8')
