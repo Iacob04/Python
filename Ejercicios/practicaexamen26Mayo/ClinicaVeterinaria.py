@@ -24,7 +24,7 @@ class Mascota:
 rex = Mascota("Rex", "Perro", 3)
 print(rex)
 
-class MascotaExotica(Mascota):
+class MascotaExotica(Mascota):  
 
     def __init__(self, nombre, especie, edad, pais_origen):
         super().__init__(nombre,especie,edad)
@@ -59,7 +59,7 @@ class Clinica:
     def listar(self):
         for mascota in self.mascotas:
             print(mascota)
-            
+
 clinica = Clinica("Clínica San Antón")
 clinica.registrar(rex)
 clinica.registrar(kiwi)
