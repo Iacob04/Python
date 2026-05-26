@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuleta Examen — POO y Bases de Datos (Python)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Spline+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1115;
+    --bg2:#161922;
+    --panel:#1b1f2a;
+    --panel2:#222735;
+    --ink:#e8eaf0;
+    --ink-soft:#aab0c0;
+    --ink-dim:#7a8194;
+    --accent:#ffc857;      /* ámbar */
+    --accent2:#5ce1a6;     /* verde menta */
+    --accent3:#7aa2ff;     /* azul */
+    --danger:#ff7a8a;
+    --line:#2b3142;
+    --code-bg:#11141c;
+    --code-key:#ff9d6c;    /* keywords */
+    --code-str:#9be38f;    /* strings */
+    --code-com:#5f6b82;    /* comentarios */
+    --code-fn:#7aa2ff;     /* funciones */
+    --code-num:#ffc857;
+    --radius:14px;
+    --shadow:0 10px 40px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(122,162,255,.08), transparent),
+      radial-gradient(900px 500px at -10% 20%, rgba(92,225,166,.06), transparent),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Spline Sans',system-ui,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:120px;
+  }
+
+  /* ===== Layout ===== */
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+  header.hero{
+    padding:46px 0 26px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:30px;
+  }
+  .kicker{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:14px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.04;
+    letter-spacing:-.02em;margin-bottom:14px;
+  }
+  h1 em{font-style:italic;color:var(--accent)}
+  .sub{color:var(--ink-soft);font-size:1.05rem;max-width:680px}
+
+  /* ===== Search ===== */
+  .searchbar{
+    position:sticky;top:0;z-index:50;
+    background:linear-gradient(var(--bg),var(--bg) 70%, transparent);
+    padding:14px 0 16px;margin-bottom:8px;
+  }
+  .search-inner{position:relative}
+  #search{
+    width:100%;padding:16px 18px 16px 50px;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--radius);color:var(--ink);font-size:1.02rem;
+    font-family:'Spline Sans',sans-serif;outline:none;transition:.2s;
+  }
+  #search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,200,87,.12)}
+  .search-inner svg{position:absolute;left:17px;top:50%;transform:translateY(-50%);
+    width:20px;height:20px;stroke:var(--ink-dim)}
+  .search-hint{font-size:.8rem;color:var(--ink-dim);margin-top:8px;font-family:'JetBrains Mono',monospace}
+  .no-results{display:none;text-align:center;padding:60px 20px;color:var(--ink-dim)}
+  .no-results.show{display:block}
+
+  /* ===== Tabs / nav ===== */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+  .tab{
+    padding:9px 18px;border-radius:999px;border:1px solid var(--line);
+    background:var(--panel);color:var(--ink-soft);cursor:pointer;
+    font-size:.92rem;font-weight:500;transition:.18s;user-select:none;
+  }
+  .tab:hover{border-color:var(--accent3);color:var(--ink)}
+  .tab.active{background:var(--accent);color:#1a1205;border-color:var(--accent);font-weight:600}
+
+  /* ===== Sections ===== */
+  .section{margin-bottom:14px}
+  .section.hidden{display:none}
+  .section-title{
+    font-family:'Fraunces',serif;font-size:1.9rem;font-weight:600;
+    margin:38px 0 6px;letter-spacing:-.01em;display:flex;align-items:center;gap:12px;
+  }
+  .section-title .dot{width:11px;height:11px;border-radius:50%;background:var(--accent2)}
+  .section-title.poo .dot{background:var(--accent)}
+  .section-title.bd .dot{background:var(--accent3)}
+  .section-lead{color:var(--ink-soft);margin-bottom:8px;font-size:1.02rem}
+
+  /* ===== Cards ===== */
+  .card{
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px 26px;margin:18px 0;
+    box-shadow:var(--shadow);
+  }
+  .card h3{
+    font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;
+    margin-bottom:6px;color:var(--ink);
+  }
+  .card h3 .num{
+    font-family:'JetBrains Mono',monospace;font-size:.85rem;
+    color:var(--accent);margin-right:10px;font-weight:700;
+  }
+  .card p{color:var(--ink-soft);margin:10px 0}
+  .card p strong{color:var(--ink);font-weight:600}
+  .card .lead{color:var(--ink);font-size:1.02rem;margin-bottom:4px}
+
+  /* highlight box for key concept */
+  .keybox{
+    border-left:3px solid var(--accent2);
+    background:rgba(92,225,166,.07);
+    padding:13px 17px;border-radius:8px;margin:14px 0;font-size:.96rem;color:var(--ink-soft);
+  }
+  .keybox.warn{border-color:var(--danger);background:rgba(255,122,138,.08)}
+  .keybox.tip{border-color:var(--accent);background:rgba(255,200,87,.07)}
+  .keybox strong{color:var(--ink)}
+  .keybox .label{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;
+    letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;
+    color:var(--accent2);font-weight:700;
+  }
+  .keybox.warn .label{color:var(--danger)}
+  .keybox.tip .label{color:var(--accent)}
+
+  /* ===== Code blocks ===== */
+  .codewrap{position:relative;margin:14px 0}
+  pre{
+    background:var(--code-bg);border:1px solid var(--line);
+    border-radius:10px;padding:18px 18px;overflow-x:auto;
+    font-family:'JetBrains Mono',monospace;font-size:.86rem;line-height:1.6;
+  }
+  pre code{color:#cdd3e0;white-space:pre}
+  .copybtn{
+    position:absolute;top:10px;right:10px;
+    background:var(--panel2);border:1px solid var(--line);
+    color:var(--ink-soft);padding:6px 12px;border-radius:7px;
+    font-size:.74rem;cursor:pointer;font-family:'JetBrains Mono',monospace;
+    transition:.15s;opacity:.85;
+  }
+  .copybtn:hover{background:var(--accent);color:#1a1205;border-color:var(--accent);opacity:1}
+  .copybtn.done{background:var(--accent2);color:#06291b;border-color:var(--accent2)}
+
+  /* syntax colors */
+  .k{color:var(--code-key)}     /* keyword */
+  .s{color:var(--code-str)}     /* string */
+  .c{color:var(--code-com);font-style:italic} /* comment */
+  .f{color:var(--code-fn)}      /* function/class */
+  .n{color:var(--code-num)}     /* number */
+  .o{color:#e8eaf0}             /* operator */
+  .b{color:#c792ea}             /* builtin/decorator */
+
+  /* ===== Tables ===== */
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+  th{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.78rem;
+    letter-spacing:.08em;text-transform:uppercase}
+  td{color:var(--ink-soft)}
+  td code,p code,li code{
+    background:var(--code-bg);padding:2px 7px;border-radius:5px;
+    font-family:'JetBrains Mono',monospace;font-size:.83em;color:var(--accent2);
+    border:1px solid var(--line);
+  }
+  tr:hover td{background:rgba(255,255,255,.02)}
+
+  ul.clean{list-style:none;margin:10px 0}
+  ul.clean li{padding:7px 0 7px 26px;position:relative;color:var(--ink-soft)}
+  ul.clean li::before{content:"▸";position:absolute;left:4px;color:var(--accent)}
+  ul.clean li strong{color:var(--ink)}
+
+  /* exercise card */
+  .exercise{border-left:3px solid var(--accent3)}
+  .exercise .tag{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--accent3);
+    background:rgba(122,162,255,.1);padding:3px 9px;border-radius:5px;margin-bottom:10px;font-weight:700;
+  }
+  .exercise .tag.solved{color:var(--accent2);background:rgba(92,225,166,.1)}
+  .solution-toggle{
+    margin-top:14px;background:var(--panel2);border:1px solid var(--line);
+    color:var(--accent);padding:9px 16px;border-radius:8px;cursor:pointer;
+    font-size:.85rem;font-weight:600;font-family:'Spline Sans',sans-serif;transition:.15s;
+  }
+  .solution-toggle:hover{background:var(--accent);color:#1a1205;border-color:var(--accent)}
+  .solution{display:none;margin-top:14px;animation:fade .3s ease}
+  .solution.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+  footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);
+    color:var(--ink-dim);font-size:.85rem;text-align:center}
+
+  mark{background:var(--accent);color:#1a1205;padding:0 3px;border-radius:3px}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{height:9px;width:9px}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">Fundamentos de Programación · DAM · UD 8 + UD 9</div>
+    <h1>Chuleta de examen<br><em>POO</em> y <em>Bases de Datos</em> en Python</h1>
+    <p class="sub">Todo lo que entra en RA4 (orientación a objetos) y RA6 (bases de datos relacionales), explicado al detalle y con código listo para copiar. Usa el buscador para encontrar cualquier concepto al instante.</p>
+  </header>
+</div>
+
+<div class="wrap">
+  <div class="searchbar">
+    <div class="search-inner">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Buscar: constructor, super, INSERT, commit, foreign key, fetchall...">
+    </div>
+    <div class="search-hint">Escribe para filtrar tarjetas en tiempo real · ESC para limpiar</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="all">Todo</div>
+    <div class="tab" data-tab="poo">🟡 POO (clases)</div>
+    <div class="tab" data-tab="bd">🔵 Bases de datos</div>
+    <div class="tab" data-tab="ej">🟢 Ejercicios</div>
+    <div class="tab" data-tab="err">⚠️ Errores típicos</div>
+  </div>
+
+  <div class="no-results" id="noResults">
+    <p style="font-size:1.3rem;margin-bottom:8px">Sin resultados 🔍</p>
+    <p>Prueba con otra palabra (ej: <code>property</code>, <code>UPDATE</code>, <code>herencia</code>)</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- ====================== POO  =================================== -->
+  <!-- ============================================================= -->
+  <section class="section" data-cat="poo">
+    <h2 class="section-title poo"><span class="dot"></span>RA4 · Programación Orientada a Objetos</h2>
+    <p class="section-lead">Clases, objetos, herencia, encapsulación y clases abstractas en Python.</p>
+
+    <!-- CARD: clase y objeto -->
+    <div class="card" data-keywords="clase objeto instancia constructor init self atributo plantilla instanciar crear">
+      <h3><span class="num">1</span>Clase, objeto y constructor <code>__init__</code></h3>
+      <p class="lead">Una <strong>clase</strong> es la plantilla; un <strong>objeto</strong> es una instancia concreta creada a partir de ella.</p>
+      <ul class="clean">
+        <li><strong><code>__init__</code></strong> es el constructor: se ejecuta automáticamente al crear el objeto.</li>
+        <li><strong><code>self</code></strong> representa al propio objeto (como <code>this</code> en Java). Es siempre el primer parámetro.</li>
+        <li>Un parámetro como <code>nivel=1</code> tiene <strong>valor por defecto</strong>: si no lo pasas, vale 1.</li>
+      </ul>
+      <div class="codewrap"><pre><code><span class="k">class</span> <span class="f">Pokemon</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre, tipo, nivel=<span class="n">1</span>):   <span class="c"># constructor</span>
+        <span class="b">self</span>.nombre = nombre        <span class="c"># atributo público</span>
+        <span class="b">self</span>.tipo   = tipo
+        <span class="b">self</span>.nivel  = nivel
+        <span class="b">self</span>.vida   = nivel * <span class="n">10</span>     <span class="c"># atributo calculado</span>
+
+<span class="c"># Instanciar = crear un objeto</span>
+pikachu = <span class="f">Pokemon</span>(<span class="s">"Pikachu"</span>, <span class="s">"Eléctrico"</span>, <span class="n">5</span>)
+<span class="b">print</span>(pikachu.nombre)   <span class="c"># Pikachu</span></code></pre></div>
+    </div>
+
+    <!-- CARD: metodos y str -->
+    <div class="card" data-keywords="metodo instancia str tostring print return magico funcion comportamiento">
+      <h3><span class="num">2</span>Métodos de instancia y <code>__str__</code></h3>
+      <p>Los <strong>métodos</strong> son funciones dentro de la clase; siempre reciben <code>self</code> primero. <code>__str__</code> define qué se muestra al hacer <code>print(objeto)</code> (es el <code>toString()</code> de Java).</p>
+      <div class="keybox tip"><span class="label">Clave del examen</span><code>__str__</code> siempre lleva <strong>return</strong>, nunca <code>print</code>. Y cuidado con escribirlo bien: <code>__str__</code>, no <code>__srt__</code> (ese error baja nota).</div>
+      <div class="codewrap"><pre><code><span class="k">class</span> <span class="f">Pokemon</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre, nivel=<span class="n">1</span>):
+        <span class="b">self</span>.nombre = nombre
+        <span class="b">self</span>.nivel  = nivel
+
+    <span class="k">def</span> <span class="f">subir_nivel</span>(<span class="b">self</span>):          <span class="c"># método de instancia</span>
+        <span class="b">self</span>.nivel += <span class="n">1</span>
+
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):              <span class="c"># se llama con print(objeto)</span>
+        <span class="k">return</span> <span class="s">f"Pokemon(</span>{<span class="b">self</span>.nombre}<span class="s">, nivel=</span>{<span class="b">self</span>.nivel}<span class="s">)"</span>
+
+p = <span class="f">Pokemon</span>(<span class="s">"Charmander"</span>, <span class="n">3</span>)
+p.<span class="f">subir_nivel</span>()
+<span class="b">print</span>(p)   <span class="c"># Pokemon(Charmander, nivel=4)</span></code></pre></div>
+    </div>
+
+    <!-- CARD: encapsulacion -->
+    <div class="card" data-keywords="encapsulacion property setter getter protegido privado guion bajo proteccion validacion acceso">
+      <h3><span class="num">3</span>Encapsulación: <code>@property</code> y <code>@setter</code></h3>
+      <p>Permiten leer (getter) y modificar (setter) atributos protegidos con control. Se usan <strong>sin paréntesis</strong>, como un atributo normal.</p>
+      <table>
+        <tr><th>Notación</th><th>Nivel</th><th>Significado</th></tr>
+        <tr><td><code>nombre</code></td><td>Público</td><td>Acceso libre desde fuera</td></tr>
+        <tr><td><code>_edad</code></td><td>Protegido</td><td>1 guion bajo · accesible en subclases (convención)</td></tr>
+        <tr><td><code>__edad</code></td><td>Privado</td><td>2 guiones bajos · solo dentro de su clase</td></tr>
+      </table>
+      <div class="codewrap"><pre><code><span class="k">class</span> <span class="f">Entrenador</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre, edad):
+        <span class="b">self</span>.nombre = nombre
+        <span class="b">self</span>._edad  = edad        <span class="c"># _ = protegido</span>
+
+    <span class="b">@property</span>                     <span class="c"># GETTER → leer</span>
+    <span class="k">def</span> <span class="f">edad</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="b">self</span>._edad
+
+    <span class="b">@edad.setter</span>                 <span class="c"># SETTER → escribir con control</span>
+    <span class="k">def</span> <span class="f">edad</span>(<span class="b">self</span>, nueva):
+        <span class="k">if</span> nueva &lt; <span class="n">0</span>:
+            <span class="b">print</span>(<span class="s">"La edad no puede ser negativa."</span>)
+        <span class="k">else</span>:
+            <span class="b">self</span>._edad = nueva
+
+ash = <span class="f">Entrenador</span>(<span class="s">"Ash"</span>, <span class="n">10</span>)
+<span class="b">print</span>(ash.edad)   <span class="c"># getter → 10 (sin paréntesis)</span>
+ash.edad = -<span class="n">5</span>      <span class="c"># setter → "La edad no puede ser negativa."</span>
+ash.edad = <span class="n">11</span>      <span class="c"># setter → asigna 11</span></code></pre></div>
+    </div>
+
+    <!-- CARD: static / class method -->
+    <div class="card" data-keywords="staticmethod classmethod metodo estatico clase cls decorador sin self">
+      <h3><span class="num">4</span><code>@staticmethod</code> y <code>@classmethod</code></h3>
+      <ul class="clean">
+        <li><strong><code>@staticmethod</code></strong>: no recibe <code>self</code> ni <code>cls</code>. Es una función agrupada en la clase.</li>
+        <li><strong><code>@classmethod</code></strong>: recibe <code>cls</code> (la clase en sí), no el objeto.</li>
+        <li>Ambos se llaman desde la clase: <code>NombreClase.metodo()</code>, sin crear objeto.</li>
+      </ul>
+      <div class="codewrap"><pre><code><span class="k">class</span> <span class="f">Pokemon</span>:
+    <span class="b">@staticmethod</span>
+    <span class="k">def</span> <span class="f">descripcion</span>():            <span class="c"># sin self</span>
+        <span class="k">return</span> <span class="s">"Criaturas con habilidades."</span>
+
+    <span class="b">@classmethod</span>
+    <span class="k">def</span> <span class="f">listar</span>(<span class="b">cls</span>, lista):       <span class="c"># recibe cls</span>
+        <span class="k">for</span> p <span class="k">in</span> lista:
+            <span class="b">print</span>(p)
+
+<span class="b">print</span>(<span class="f">Pokemon</span>.<span class="f">descripcion</span>())   <span class="c"># sin crear objeto</span></code></pre></div>
+    </div>
+
+    <!-- CARD: herencia -->
+    <div class="card" data-keywords="herencia super init padre hijo subclase override sobreescribir isinstance extends">
+      <h3><span class="num">5</span>Herencia, <code>super()</code> y <code>isinstance()</code></h3>
+      <p><code>class Hija(Padre)</code> hace que <strong>Hija herede</strong> atributos y métodos de Padre. <code>super().__init__(...)</code> llama al constructor del padre (obligatorio si la hija tiene su propio <code>__init__</code>).</p>
+      <ul class="clean">
+        <li><strong>Sobreescribir (override):</strong> redefinir un método del padre en la hija.</li>
+        <li><strong><code>isinstance(obj, Clase)</code>:</strong> devuelve <code>True/False</code> según el tipo. Útil para poner límites.</li>
+      </ul>
+      <div class="codewrap"><pre><code><span class="k">class</span> <span class="f">Animal</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre, nacimiento):
+        <span class="b">self</span>.nombre = nombre
+        <span class="b">self</span>.nacimiento = nacimiento
+
+<span class="k">class</span> <span class="f">Perro</span>(<span class="f">Animal</span>):                  <span class="c"># Perro hereda de Animal</span>
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre, nacimiento, vacunado):
+        <span class="b">super</span>().<span class="f">__init__</span>(nombre, nacimiento)  <span class="c"># constructor del padre</span>
+        <span class="b">self</span>.vacunado = vacunado            <span class="c"># atributo propio</span>
+
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):                    <span class="c"># sobreescribe (override)</span>
+        estado = <span class="s">"vacunado"</span> <span class="k">if</span> <span class="b">self</span>.vacunado <span class="k">else</span> <span class="s">"sin vacunar"</span>
+        <span class="k">return</span> <span class="s">f"Perro(</span>{<span class="b">self</span>.nombre}<span class="s">, </span>{estado}<span class="s">)"</span>
+
+tobi = <span class="f">Perro</span>(<span class="s">"Tobi"</span>, <span class="n">2020</span>, <span class="k">True</span>)
+<span class="b">print</span>(<span class="b">isinstance</span>(tobi, <span class="f">Perro</span>))    <span class="c"># True</span>
+<span class="b">print</span>(<span class="b">isinstance</span>(tobi, <span class="f">Animal</span>))   <span class="c"># True (por herencia)</span></code></pre></div>
+    </div>
+
+    <!-- CARD: abstracta -->
+    <div class="card" data-keywords="clase abstracta abstractmethod ABC abc no instanciar base obligar implementar">
+      <h3><span class="num">6</span>Clase abstracta: <code>ABC</code> + <code>@abstractmethod</code></h3>
+      <p>Una clase abstracta <strong>no se puede instanciar</strong>; sirve de base. <code>@abstractmethod</code> obliga a las subclases a implementar ese método.</p>
+      <div class="codewrap"><pre><code><span class="k">from</span> abc <span class="k">import</span> <span class="f">ABC</span>, <span class="f">abstractmethod</span>
+
+<span class="k">class</span> <span class="f">Personaje</span>(<span class="f">ABC</span>):              <span class="c"># no instanciable</span>
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre):
+        <span class="b">self</span>._nombre = nombre
+
+    <span class="b">@property</span>
+    <span class="k">def</span> <span class="f">nombre</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="b">self</span>._nombre
+
+    <span class="b">@abstractmethod</span>
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):              <span class="c"># cada hija DEBE definirlo</span>
+        <span class="k">pass</span>
+
+<span class="k">class</span> <span class="f">Heroe</span>(<span class="f">Personaje</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre, poder):
+        <span class="b">super</span>().<span class="f">__init__</span>(nombre)
+        <span class="b">self</span>.__poder = poder       <span class="c"># privado</span>
+
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="s">f"</span>{<span class="b">self</span>._nombre}<span class="s"> - </span>{<span class="b">self</span>.__poder}<span class="s">"</span></code></pre></div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- ====================== BASES DE DATOS ======================== -->
+  <!-- ============================================================= -->
+  <section class="section" data-cat="bd">
+    <h2 class="section-title bd"><span class="dot"></span>RA6 · Bases de datos relacionales (sqlite3)</h2>
+    <p class="section-lead">Conexión, creación de tablas, CRUD, integridad y consultas con la librería <code>sqlite3</code>.</p>
+
+    <!-- CARD: esqueleto -->
+    <div class="card" data-keywords="conexion connect cursor commit close esqueleto base row_factory sqlite3 patron import">
+      <h3><span class="num">1</span>Esqueleto base: conexión, cursor, commit, cierre</h3>
+      <p>Todo programa con BD sigue el mismo patrón. <code>connect()</code> <strong>crea</strong> el archivo <code>.db</code> si no existe, o se <strong>conecta</strong> a él si ya existe.</p>
+      <div class="keybox"><span class="label">Recuerda</span><code>commit()</code> es <strong>obligatorio</strong> tras modificar datos (INSERT/UPDATE/DELETE). El SELECT no lo necesita. <code>row_factory = sqlite3.Row</code> permite acceder a columnas por nombre: <code>fila["nombre"]</code>.</div>
+      <div class="codewrap"><pre><code><span class="k">import</span> sqlite3
+
+<span class="c"># crea el .db si no existe; si existe, se conecta</span>
+conexion = sqlite3.<span class="f">connect</span>(<span class="s">"gimnasio.db"</span>)
+conexion.row_factory = sqlite3.Row   <span class="c"># columnas por nombre</span>
+cursor = conexion.<span class="f">cursor</span>()
+
+<span class="c"># ... aquí van los cursor.execute(...) ...</span>
+
+conexion.<span class="f">commit</span>()   <span class="c"># CONFIRMA los cambios</span>
+cursor.<span class="f">close</span>()
+conexion.<span class="f">close</span>()</code></pre></div>
+    </div>
+
+    <!-- CARD: create table -->
+    <div class="card" data-keywords="create table crear tabla primary key autoincrement not null default foreign key integridad restriccion tipos integer real text datetime">
+      <h3><span class="num">2</span>Crear tablas e <mark>integridad</mark> (CREATE TABLE)</h3>
+      <p>Aquí está la parte de <strong>integridad</strong> que da nombre al RA6. Cada restricción tiene su función.</p>
+      <table>
+        <tr><th>Restricción</th><th>Qué hace</th></tr>
+        <tr><td><code>PRIMARY KEY</code></td><td>Identifica de forma <strong>única</strong> cada fila</td></tr>
+        <tr><td><code>AUTOINCREMENT</code></td><td>SQLite asigna el id solo (1, 2, 3...)</td></tr>
+        <tr><td><code>NOT NULL</code></td><td>El campo no puede quedar vacío</td></tr>
+        <tr><td><code>DEFAULT x</code></td><td>Valor por defecto si no se indica</td></tr>
+        <tr><td><code>IF NOT EXISTS</code></td><td>Evita error si la tabla ya existe</td></tr>
+        <tr><td><code>FOREIGN KEY</code></td><td>Enlaza con la clave de otra tabla</td></tr>
+      </table>
+      <p style="margin-top:8px">Tipos en SQLite: <code>INTEGER</code> · <code>REAL</code> (decimales) · <code>TEXT</code> · <code>DATETIME</code></p>
+      <div class="codewrap"><pre><code>cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    CREATE TABLE IF NOT EXISTS libros (</span>
+<span class="s">        id          INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s">        titulo      TEXT    NOT NULL,</span>
+<span class="s">        autor       TEXT    NOT NULL,</span>
+<span class="s">        anio        INTEGER NOT NULL,</span>
+<span class="s">        disponible  INTEGER NOT NULL DEFAULT 1</span>
+<span class="s">    )</span>
+<span class="s">"""</span>)
+conexion.<span class="f">commit</span>()</code></pre></div>
+    </div>
+
+    <!-- CARD: CRUD -->
+    <div class="card" data-keywords="crud insert select update delete create read crear leer actualizar borrar eliminar values set where">
+      <h3><span class="num">3</span>Las 4 operaciones CRUD</h3>
+      <p><strong>C</strong>reate · <strong>R</strong>ead · <strong>U</strong>pdate · <strong>D</strong>elete. El núcleo del examen.</p>
+      <div class="codewrap"><pre><code><span class="c"># ── INSERT (Create) — siempre con ? ──</span>
+cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    INSERT INTO libros (titulo, autor, anio)</span>
+<span class="s">    VALUES (?, ?, ?)</span>
+<span class="s">"""</span>, (titulo, autor, anio))
+conexion.<span class="f">commit</span>()
+
+<span class="c"># ── SELECT (Read) ──</span>
+cursor.<span class="f">execute</span>(<span class="s">"SELECT * FROM libros"</span>)
+registros = cursor.<span class="f">fetchall</span>()
+<span class="k">for</span> r <span class="k">in</span> registros:
+    <span class="b">print</span>(r[<span class="s">"titulo"</span>], r[<span class="s">"autor"</span>])
+
+<span class="c"># ── UPDATE (Update) ──</span>
+cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    UPDATE libros SET disponible = ? WHERE id = ?</span>
+<span class="s">"""</span>, (<span class="n">0</span>, <span class="n">2</span>))
+conexion.<span class="f">commit</span>()
+
+<span class="c"># ── DELETE (Delete) ──</span>
+cursor.<span class="f">execute</span>(<span class="s">"DELETE FROM libros WHERE id = ?"</span>, (id_libro,))
+conexion.<span class="f">commit</span>()</code></pre></div>
+    </div>
+
+    <!-- CARD: parametros ? -->
+    <div class="card" data-keywords="parametros interrogante placeholder tupla inyeccion sql seguridad coma comodin proteccion">
+      <h3><span class="num">4</span>Los <code>?</code> parametrizados (¡cae seguro!)</h3>
+      <p>Los <code>?</code> son <strong>marcadores de posición</strong>; los valores van en una <strong>tupla</strong> como segundo argumento de <code>execute()</code>.</p>
+      <div class="keybox tip"><span class="label">Por qué se usan</span>1) <strong>Evitan la inyección SQL</strong> (seguridad / integridad). &nbsp;2) Manejan bien comillas y tipos automáticamente.</div>
+      <div class="keybox warn"><span class="label">Trampa clásica</span>Con <strong>un solo parámetro</strong>, la coma de la tupla es <strong>obligatoria</strong>: <code>(id_libro,)</code> es una tupla, <code>(id_libro)</code> no lo es y da error.</div>
+      <div class="codewrap"><pre><code><span class="c"># ✅ CORRECTO</span>
+cursor.<span class="f">execute</span>(<span class="s">"SELECT * FROM libros WHERE autor = ?"</span>, (autor,))
+cursor.<span class="f">execute</span>(<span class="s">"DELETE FROM libros WHERE id = ?"</span>, (id_libro,))   <span class="c"># ← la coma</span>
+
+<span class="c"># ❌ MAL — vulnerable a inyección SQL</span>
+cursor.<span class="f">execute</span>(<span class="s">f"SELECT * FROM libros WHERE autor = </span>{autor}<span class="s">"</span>)</code></pre></div>
+    </div>
+
+    <!-- CARD: fetch -->
+    <div class="card" data-keywords="fetchall fetchone obtener resultados filas una todas lista recuperar lastrowid">
+      <h3><span class="num">5</span><code>fetchall()</code> vs <code>fetchone()</code></h3>
+      <ul class="clean">
+        <li><strong><code>fetchall()</code></strong>: devuelve una <strong>lista</strong> con todas las filas. Para listados.</li>
+        <li><strong><code>fetchone()</code></strong>: devuelve <strong>solo la primera</strong> fila. Para un único resultado (ej: una media).</li>
+        <li><strong><code>cursor.lastrowid</code></strong>: el id que SQLite asignó al último INSERT (útil para enlazar tablas).</li>
+      </ul>
+      <div class="codewrap"><pre><code>registros = cursor.<span class="f">fetchall</span>()   <span class="c"># LISTA de todas las filas</span>
+una_fila  = cursor.<span class="f">fetchone</span>()   <span class="c"># SOLO la primera fila</span>
+
+<span class="c"># obtener el id recién insertado</span>
+cursor.<span class="f">execute</span>(<span class="s">"INSERT INTO alumnos (nombre) VALUES (?)"</span>, (nombre,))
+conexion.<span class="f">commit</span>()
+nuevo_id = cursor.lastrowid</code></pre></div>
+    </div>
+
+    <!-- CARD: where / agregados -->
+    <div class="card" data-keywords="select where filtro and or order by group agregado count avg sum max min like promedio media alias as">
+      <h3><span class="num">6</span>Filtros, orden y funciones de agregado</h3>
+      <table>
+        <tr><th>Función</th><th>Qué calcula</th></tr>
+        <tr><td><code>COUNT(*)</code></td><td>Número de filas</td></tr>
+        <tr><td><code>AVG(col)</code></td><td>Media (promedio)</td></tr>
+        <tr><td><code>SUM(col)</code></td><td>Suma total</td></tr>
+        <tr><td><code>MAX / MIN(col)</code></td><td>Mayor / menor valor</td></tr>
+      </table>
+      <div class="codewrap"><pre><code><span class="c"># filtrar con WHERE + condiciones combinadas</span>
+cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    SELECT nombre, precio FROM productos</span>
+<span class="s">    WHERE precio > 500 AND categoria = 'Informática'</span>
+<span class="s">"""</span>)
+
+<span class="c"># ordenar (DESC = descendente, ASC = ascendente)</span>
+cursor.<span class="f">execute</span>(<span class="s">"SELECT * FROM notas ORDER BY nota DESC"</span>)
+
+<span class="c"># agregados con alias AS</span>
+cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    SELECT COUNT(*) AS total, AVG(precio) AS media</span>
+<span class="s">    FROM productos WHERE categoria = 'Audio'</span>
+<span class="s">"""</span>)
+res = cursor.<span class="f">fetchone</span>()
+<span class="b">print</span>(res[<span class="s">"total"</span>], <span class="b">round</span>(res[<span class="s">"media"</span>], <span class="n">2</span>))</code></pre></div>
+    </div>
+
+    <!-- CARD: foreign key -->
+    <div class="card" data-keywords="foreign key clave foranea relacion tablas references integridad referencial huerfano borrar orden padre hijo">
+      <h3><span class="num">7</span>Relaciones entre tablas: <code>FOREIGN KEY</code></h3>
+      <p>La parte central de "mantener la integridad". Una tabla se relaciona con otra mediante una <strong>clave foránea</strong>: un campo que debe corresponder a una clave que exista en la otra tabla.</p>
+      <div class="codewrap"><pre><code>cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    CREATE TABLE IF NOT EXISTS notas (</span>
+<span class="s">        id         INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s">        id_alumno  INTEGER NOT NULL,</span>
+<span class="s">        asignatura TEXT NOT NULL,</span>
+<span class="s">        nota       REAL NOT NULL,</span>
+<span class="s">        FOREIGN KEY (id_alumno) REFERENCES alumnos(id)</span>
+<span class="s">    )</span>
+<span class="s">"""</span>)</code></pre></div>
+      <div class="keybox warn"><span class="label">Integridad al borrar</span>Borra primero los "hijos" y luego el "padre". Si no, las filas hijas quedan <strong>huérfanas</strong> (apuntan a algo que ya no existe).</div>
+      <div class="codewrap"><pre><code><span class="k">def</span> <span class="f">eliminar_alumno</span>(id_alumno):
+    cursor.<span class="f">execute</span>(<span class="s">"DELETE FROM notas WHERE id_alumno = ?"</span>, (id_alumno,))   <span class="c"># 1º hijos</span>
+    cursor.<span class="f">execute</span>(<span class="s">"DELETE FROM alumnos WHERE id = ?"</span>, (id_alumno,))        <span class="c"># 2º padre</span>
+    conexion.<span class="f">commit</span>()</code></pre></div>
+    </div>
+
+    <!-- CARD: chuleta rápida SQL -->
+    <div class="card" data-keywords="resumen sintaxis sql rapida create insert select update delete where order by group count avg sum min max distinct like referencia todo">
+      <h3><span class="num">8</span>Referencia rápida SQL (todo en una tarjeta)</h3>
+      <p>Si te piden una variante distinta, aquí tienes la sintaxis de cada operación de un vistazo.</p>
+      <table>
+        <tr><th>Operación</th><th>Sintaxis</th></tr>
+        <tr><td>Crear tabla</td><td><code>CREATE TABLE IF NOT EXISTS t (col TIPO restricciones, ...)</code></td></tr>
+        <tr><td>Insertar</td><td><code>INSERT INTO t (col1, col2) VALUES (?, ?)</code></td></tr>
+        <tr><td>Consultar todo</td><td><code>SELECT * FROM t</code></td></tr>
+        <tr><td>Consultar columnas</td><td><code>SELECT col1, col2 FROM t</code></td></tr>
+        <tr><td>Filtrar</td><td><code>... WHERE col = ? AND/OR col2 &gt; ?</code></td></tr>
+        <tr><td>Ordenar</td><td><code>... ORDER BY col ASC</code> (o <code>DESC</code>)</td></tr>
+        <tr><td>Actualizar</td><td><code>UPDATE t SET col = ? WHERE col2 = ?</code></td></tr>
+        <tr><td>Borrar</td><td><code>DELETE FROM t WHERE col = ?</code></td></tr>
+        <tr><td>Contar / agrupar</td><td><code>SELECT col, COUNT(*) FROM t GROUP BY col</code></td></tr>
+        <tr><td>Agregados</td><td><code>COUNT(*)</code>, <code>AVG(col)</code>, <code>SUM(col)</code>, <code>MIN/MAX(col)</code></td></tr>
+        <tr><td>Texto parcial</td><td><code>... WHERE col LIKE '%palabra%'</code></td></tr>
+        <tr><td>Sin repetidos</td><td><code>SELECT DISTINCT col FROM t</code></td></tr>
+      </table>
+      <div class="keybox tip"><span class="label">Tipos en SQLite</span><code>INTEGER</code> (enteros) · <code>REAL</code> (decimales) · <code>TEXT</code> (texto). Restricciones: <code>PRIMARY KEY</code>, <code>AUTOINCREMENT</code>, <code>NOT NULL</code>, <code>DEFAULT valor</code>, <code>UNIQUE</code>.</div>
+      <div class="keybox"><span class="label">Recoger resultados</span><code>fetchall()</code> → lista de todas las filas (para un <code>for</code>). <code>fetchone()</code> → una sola fila (para agregados como COUNT/AVG).</div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- ====================== ERRORES TÍPICOS ======================= -->
+  <!-- ============================================================= -->
+  <section class="section" data-cat="err">
+    <h2 class="section-title"><span class="dot" style="background:var(--danger)"></span>⚠️ Errores típicos que bajan nota</h2>
+    <p class="section-lead">Repasa esto el último, justo antes de entregar. Son fallos reales detectados en exámenes anteriores.</p>
+
+    <div class="card" data-keywords="errores fallos typo str srt commit comillas tupla coma comparacion igual integridad teoria">
+      <h3>Checklist anti-suspenso</h3>
+      <table>
+        <tr><th>Error</th><th>Correcto</th></tr>
+        <tr><td><code>def __srt__</code> (typo)</td><td><code>def __str__</code> — si lo escribes mal, Python no lo reconoce</td></tr>
+        <tr><td>Olvidar <code>conexion.commit()</code> tras INSERT/UPDATE/DELETE</td><td>Sin commit los cambios <strong>no se guardan</strong></td></tr>
+        <tr><td><code>WHERE categoria = Telefonía</code></td><td><code>WHERE categoria = 'Telefonía'</code> — el texto va entre comillas</td></tr>
+        <tr><td><code>WHERE precio > 500 AND categoria 'X'</code></td><td>Falta el <code>=</code>: <code>... AND categoria = 'X'</code></td></tr>
+        <tr><td><code>execute("... id = ?", (id))</code></td><td><code>(id,)</code> — con un parámetro, la coma es obligatoria</td></tr>
+        <tr><td>SELECT solo trae <code>nombre</code> pero imprimes <code>fila["precio"]</code></td><td>Pide en el SELECT todas las columnas que vayas a usar</td></tr>
+        <tr><td><code>CREATE TABLE juegos (id ..., oferta ...</code> sin cerrar</td><td>Falta el <code>)</code> antes de cerrar las comillas → da <code>incomplete input</code></td></tr>
+        <tr><td><code>FROM juejos</code> (typo en el nombre de la tabla)</td><td><code>FROM juegos</code> — compara letra a letra con tu <code>CREATE TABLE</code></td></tr>
+        <tr><td><code>ORDER BY precio DESC</code> cuando piden "de barato a caro"</td><td><code>ASC</code> = de menor a mayor · <code>DESC</code> = de mayor a menor</td></tr>
+        <tr><td><code>execute("... = ?", "Switch")</code> (string suelto)</td><td><code>("Switch",)</code> — tupla con coma, o lo lee letra a letra</td></tr>
+        <tr><td><code>commit()</code> dentro de una función que solo hace SELECT</td><td>El SELECT solo lee: <strong>no</strong> lleva commit (solo INSERT/UPDATE/DELETE)</td></tr>
+        <tr><td>No incluir teoría ni mencionar la integridad</td><td>Comenta el código: PRIMARY KEY, NOT NULL, por qué usas <code>?</code>, el commit</td></tr>
+      </table>
+      <div class="keybox tip"><span class="label">Consejo de oro</span>En un examen de BD, <strong>comenta cada bloque</strong> explicando qué garantiza la integridad (clave primaria única, NOT NULL, parámetros <code>?</code> contra inyección, commit que confirma). Eso es justo lo que evalúan en el RA6 y donde se ganan los puntos de teoría.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- ====================== EJERCICIOS ============================ -->
+  <!-- ============================================================= -->
+  <section class="section" data-cat="ej">
+    <h2 class="section-title"><span class="dot" style="background:var(--accent2)"></span>🟢 Ejercicios para practicar</h2>
+    <p class="section-lead">Intenta resolverlos tapando la solución. Luego pulsa "Ver solución" para comprobar.</p>
+
+    <!-- EJ POO 1 -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio poo clase coche vehiculo constructor str practica">
+      <span class="tag">Ejercicio · POO · básico</span>
+      <h3>1. Clase <code>Coche</code></h3>
+      <p>Crea una clase <code>Coche</code> con atributos <code>marca</code>, <code>modelo</code> y <code>km</code> (por defecto 0). Añade un método <code>conducir(distancia)</code> que sume km, y un <code>__str__</code> que muestre los tres datos. Crea un coche, condúcelo 150 km e imprímelo.</p>
+      <button class="solution-toggle">Ver solución ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="k">class</span> <span class="f">Coche</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, marca, modelo, km=<span class="n">0</span>):
+        <span class="b">self</span>.marca  = marca
+        <span class="b">self</span>.modelo = modelo
+        <span class="b">self</span>.km     = km
+
+    <span class="k">def</span> <span class="f">conducir</span>(<span class="b">self</span>, distancia):
+        <span class="b">self</span>.km += distancia
+
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="s">f"</span>{<span class="b">self</span>.marca}<span class="s"> </span>{<span class="b">self</span>.modelo}<span class="s"> - </span>{<span class="b">self</span>.km}<span class="s"> km"</span>
+
+c = <span class="f">Coche</span>(<span class="s">"Seat"</span>, <span class="s">"Ibiza"</span>)
+c.<span class="f">conducir</span>(<span class="n">150</span>)
+<span class="b">print</span>(c)   <span class="c"># Seat Ibiza - 150 km</span></code></pre></div>
+      </div>
+    </div>
+
+    <!-- EJ POO 2 -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio poo herencia super animal empleado property setter validacion practica">
+      <span class="tag">Ejercicio · POO · medio</span>
+      <h3>2. Herencia + <code>property</code></h3>
+      <p>Crea una clase <code>Empleado</code> con <code>nombre</code> y <code>_salario</code> (con getter y setter que no permita salarios negativos). Crea una subclase <code>Gerente</code> que añada <code>departamento</code> y sobreescriba <code>__str__</code>. Usa <code>super()</code>.</p>
+      <button class="solution-toggle">Ver solución ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="k">class</span> <span class="f">Empleado</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre, salario):
+        <span class="b">self</span>.nombre   = nombre
+        <span class="b">self</span>._salario = salario
+
+    <span class="b">@property</span>
+    <span class="k">def</span> <span class="f">salario</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="b">self</span>._salario
+
+    <span class="b">@salario.setter</span>
+    <span class="k">def</span> <span class="f">salario</span>(<span class="b">self</span>, valor):
+        <span class="k">if</span> valor &lt; <span class="n">0</span>:
+            <span class="b">print</span>(<span class="s">"El salario no puede ser negativo."</span>)
+        <span class="k">else</span>:
+            <span class="b">self</span>._salario = valor
+
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="s">f"</span>{<span class="b">self</span>.nombre}<span class="s">: </span>{<span class="b">self</span>._salario}<span class="s">€"</span>
+
+<span class="k">class</span> <span class="f">Gerente</span>(<span class="f">Empleado</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre, salario, departamento):
+        <span class="b">super</span>().<span class="f">__init__</span>(nombre, salario)
+        <span class="b">self</span>.departamento = departamento
+
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="s">f"</span>{<span class="b">self</span>.nombre}<span class="s"> (</span>{<span class="b">self</span>.departamento}<span class="s">): </span>{<span class="b">self</span>._salario}<span class="s">€"</span>
+
+g = <span class="f">Gerente</span>(<span class="s">"Lucía"</span>, <span class="n">3000</span>, <span class="s">"Ventas"</span>)
+g.salario = -<span class="n">100</span>          <span class="c"># El salario no puede ser negativo.</span>
+<span class="b">print</span>(g)                  <span class="c"># Lucía (Ventas): 3000€</span></code></pre></div>
+      </div>
+    </div>
+
+    <!-- EJ POO 3 -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio poo abstracta ABC abstractmethod figura area cuadrado circulo polimorfismo practica">
+      <span class="tag">Ejercicio · POO · avanzado</span>
+      <h3>3. Clase abstracta <code>Figura</code></h3>
+      <p>Crea una clase abstracta <code>Figura</code> con un método abstracto <code>area()</code>. Crea <code>Cuadrado</code> (lado) y <code>Circulo</code> (radio) que lo implementen. Mete las dos en una lista y recorre imprimiendo cada área.</p>
+      <button class="solution-toggle">Ver solución ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="k">from</span> abc <span class="k">import</span> <span class="f">ABC</span>, <span class="f">abstractmethod</span>
+
+<span class="k">class</span> <span class="f">Figura</span>(<span class="f">ABC</span>):
+    <span class="b">@abstractmethod</span>
+    <span class="k">def</span> <span class="f">area</span>(<span class="b">self</span>):
+        <span class="k">pass</span>
+
+<span class="k">class</span> <span class="f">Cuadrado</span>(<span class="f">Figura</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, lado):
+        <span class="b">self</span>.lado = lado
+    <span class="k">def</span> <span class="f">area</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="b">self</span>.lado ** <span class="n">2</span>
+
+<span class="k">class</span> <span class="f">Circulo</span>(<span class="f">Figura</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, radio):
+        <span class="b">self</span>.radio = radio
+    <span class="k">def</span> <span class="f">area</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="n">3.1416</span> * <span class="b">self</span>.radio ** <span class="n">2</span>
+
+figuras = [<span class="f">Cuadrado</span>(<span class="n">4</span>), <span class="f">Circulo</span>(<span class="n">3</span>)]
+<span class="k">for</span> f <span class="k">in</span> figuras:
+    <span class="b">print</span>(<span class="b">round</span>(f.<span class="f">area</span>(), <span class="n">2</span>))   <span class="c"># 16   28.27</span></code></pre></div>
+      </div>
+    </div>
+
+    <!-- EJ BD 1 -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio bd base datos crear tabla insert cafeteria producto sqlite practica">
+      <span class="tag">Ejercicio · BD · básico</span>
+      <h3>4. Crear tabla e insertar (cafetería)</h3>
+      <p>Crea una BD <code>cafeteria.db</code> con una tabla <code>productos</code> (<code>id</code> PK autoincrement, <code>nombre</code> TEXT not null, <code>precio</code> REAL not null, <code>stock</code> INTEGER por defecto 0). Inserta dos productos usando <code>?</code>. No olvides el commit.</p>
+      <button class="solution-toggle">Ver solución ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="k">import</span> sqlite3
+
+conexion = sqlite3.<span class="f">connect</span>(<span class="s">"cafeteria.db"</span>)
+conexion.row_factory = sqlite3.Row
+cursor = conexion.<span class="f">cursor</span>()
+
+cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    CREATE TABLE IF NOT EXISTS productos (</span>
+<span class="s">        id     INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s">        nombre TEXT    NOT NULL,</span>
+<span class="s">        precio REAL    NOT NULL,</span>
+<span class="s">        stock  INTEGER NOT NULL DEFAULT 0</span>
+<span class="s">    )</span>
+<span class="s">"""</span>)
+conexion.<span class="f">commit</span>()
+
+cursor.<span class="f">execute</span>(<span class="s">"INSERT INTO productos (nombre, precio, stock) VALUES (?, ?, ?)"</span>,
+               (<span class="s">"Café solo"</span>, <span class="n">1.20</span>, <span class="n">50</span>))
+cursor.<span class="f">execute</span>(<span class="s">"INSERT INTO productos (nombre, precio, stock) VALUES (?, ?, ?)"</span>,
+               (<span class="s">"Croissant"</span>, <span class="n">1.80</span>, <span class="n">30</span>))
+conexion.<span class="f">commit</span>()
+
+conexion.<span class="f">close</span>()</code></pre></div>
+      </div>
+    </div>
+
+    <!-- EJ BD 2 -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio bd select where filtro update delete consulta practica gimnasio biblioteca">
+      <span class="tag">Ejercicio · BD · medio</span>
+      <h3>5. Consultar, actualizar y borrar</h3>
+      <p>Sobre la tabla <code>productos</code> anterior: (a) muestra los productos con precio mayor de 1,50 €; (b) sube 0,30 € el precio del "Café solo"; (c) borra los productos con stock 0.</p>
+      <button class="solution-toggle">Ver solución ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="c"># (a) SELECT con filtro</span>
+cursor.<span class="f">execute</span>(<span class="s">"SELECT nombre, precio FROM productos WHERE precio > 1.5"</span>)
+<span class="k">for</span> p <span class="k">in</span> cursor.<span class="f">fetchall</span>():
+    <span class="b">print</span>(p[<span class="s">"nombre"</span>], p[<span class="s">"precio"</span>], <span class="s">"€"</span>)
+
+<span class="c"># (b) UPDATE — coge el precio actual y le suma 0.30</span>
+cursor.<span class="f">execute</span>(<span class="s">"UPDATE productos SET precio = precio + 0.30 WHERE nombre = ?"</span>,
+               (<span class="s">"Café solo"</span>,))
+conexion.<span class="f">commit</span>()
+
+<span class="c"># (c) DELETE</span>
+cursor.<span class="f">execute</span>(<span class="s">"DELETE FROM productos WHERE stock = 0"</span>)
+conexion.<span class="f">commit</span>()</code></pre></div>
+      </div>
+    </div>
+
+    <!-- EJ BD 3 -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio bd agregado count avg estadistica promedio media fetchone practica">
+      <span class="tag">Ejercicio · BD · medio</span>
+      <h3>6. Estadísticas con agregados</h3>
+      <p>Sobre <code>productos</code>: calcula y muestra el número total de productos y el precio medio de todos ellos en una sola consulta. Usa <code>fetchone()</code> y redondea la media a 2 decimales.</p>
+      <button class="solution-toggle">Ver solución ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code>cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    SELECT COUNT(*) AS total, AVG(precio) AS media</span>
+<span class="s">    FROM productos</span>
+<span class="s">"""</span>)
+res = cursor.<span class="f">fetchone</span>()
+<span class="b">print</span>(<span class="s">"Total productos:"</span>, res[<span class="s">"total"</span>])
+<span class="b">print</span>(<span class="s">"Precio medio:"</span>, <span class="b">round</span>(res[<span class="s">"media"</span>], <span class="n">2</span>), <span class="s">"€"</span>)</code></pre></div>
+      </div>
+    </div>
+
+    <!-- EJ BD 4 -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio bd dos tablas foreign key relacion clave foranea pedidos clientes integridad practica avanzado">
+      <span class="tag">Ejercicio · BD · avanzado</span>
+      <h3>7. Dos tablas relacionadas (FOREIGN KEY)</h3>
+      <p>Crea <code>clientes</code> (id, nombre) y <code>pedidos</code> (id, id_cliente como clave foránea, producto, importe). Inserta un cliente, recupera su id con <code>lastrowid</code> e inserta dos pedidos suyos. Luego muestra todos los pedidos de ese cliente.</p>
+      <button class="solution-toggle">Ver solución ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="k">import</span> sqlite3
+conexion = sqlite3.<span class="f">connect</span>(<span class="s">"tienda.db"</span>)
+conexion.row_factory = sqlite3.Row
+cursor = conexion.<span class="f">cursor</span>()
+
+cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    CREATE TABLE IF NOT EXISTS clientes (</span>
+<span class="s">        id     INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s">        nombre TEXT NOT NULL</span>
+<span class="s">    )</span>
+<span class="s">"""</span>)
+cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">    CREATE TABLE IF NOT EXISTS pedidos (</span>
+<span class="s">        id         INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s">        id_cliente INTEGER NOT NULL,</span>
+<span class="s">        producto   TEXT NOT NULL,</span>
+<span class="s">        importe    REAL NOT NULL,</span>
+<span class="s">        FOREIGN KEY (id_cliente) REFERENCES clientes(id)</span>
+<span class="s">    )</span>
+<span class="s">"""</span>)
+conexion.<span class="f">commit</span>()
+
+<span class="c"># insertar cliente y obtener su id</span>
+cursor.<span class="f">execute</span>(<span class="s">"INSERT INTO clientes (nombre) VALUES (?)"</span>, (<span class="s">"Marta"</span>,))
+conexion.<span class="f">commit</span>()
+id_marta = cursor.lastrowid
+
+<span class="c"># insertar pedidos enlazados a ese id</span>
+cursor.<span class="f">execute</span>(<span class="s">"INSERT INTO pedidos (id_cliente, producto, importe) VALUES (?, ?, ?)"</span>,
+               (id_marta, <span class="s">"Teclado"</span>, <span class="n">25.0</span>))
+cursor.<span class="f">execute</span>(<span class="s">"INSERT INTO pedidos (id_cliente, producto, importe) VALUES (?, ?, ?)"</span>,
+               (id_marta, <span class="s">"Ratón"</span>, <span class="n">12.5</span>))
+conexion.<span class="f">commit</span>()
+
+<span class="c"># pedidos de ese cliente</span>
+cursor.<span class="f">execute</span>(<span class="s">"SELECT producto, importe FROM pedidos WHERE id_cliente = ?"</span>, (id_marta,))
+<span class="k">for</span> p <span class="k">in</span> cursor.<span class="f">fetchall</span>():
+    <span class="b">print</span>(p[<span class="s">"producto"</span>], p[<span class="s">"importe"</span>], <span class="s">"€"</span>)
+
+conexion.<span class="f">close</span>()</code></pre></div>
+      </div>
+    </div>
+
+    <!-- EJ BD 5 - examen real -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio bd examen real gimnasio socios cuota actividad yoga crossfit musculacion natacion completo">
+      <span class="tag solved">Examen real · gimnasio · resuelto completo</span>
+      <h3>8. Las 5 preguntas del examen del gimnasio</h3>
+      <p>Tabla <code>socios</code>: <code>id_socio</code>, <code>nombre</code>, <code>actividad</code>, <code>cuota_mensual</code>, <code>antiguedad_meses</code>. Este es el examen real resuelto entero, para que veas el patrón completo.</p>
+      <button class="solution-toggle">Ver solución completa ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="k">import</span> sqlite3
+
+conexion = sqlite3.<span class="f">connect</span>(<span class="s">"gimnasio.db"</span>)
+conexion.row_factory = sqlite3.Row
+cursor = conexion.<span class="f">cursor</span>()
+
+<span class="c"># P1 · Socios de Yoga con más de 12 meses</span>
+<span class="k">def</span> <span class="f">pregunta1</span>():
+    cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">        SELECT nombre, antiguedad_meses FROM socios</span>
+<span class="s">        WHERE actividad = 'Yoga' AND antiguedad_meses > 12</span>
+<span class="s">    """</span>)
+    <span class="k">for</span> s <span class="k">in</span> cursor.<span class="f">fetchall</span>():
+        <span class="b">print</span>(s[<span class="s">"nombre"</span>], <span class="s">"-"</span>, s[<span class="s">"antiguedad_meses"</span>], <span class="s">"meses"</span>)
+
+<span class="c"># P2 · Subir 5€ la cuota de Crossfit</span>
+<span class="k">def</span> <span class="f">pregunta2</span>():
+    cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">        UPDATE socios SET cuota_mensual = cuota_mensual + 5</span>
+<span class="s">        WHERE actividad = 'Crossfit'</span>
+<span class="s">    """</span>)
+    conexion.<span class="f">commit</span>()
+
+<span class="c"># P3 · Borrar socios con antigüedad 0</span>
+<span class="k">def</span> <span class="f">pregunta3</span>():
+    cursor.<span class="f">execute</span>(<span class="s">"DELETE FROM socios WHERE antiguedad_meses = 0"</span>)
+    conexion.<span class="f">commit</span>()
+
+<span class="c"># P4 · Total y media de cuota de Musculación</span>
+<span class="k">def</span> <span class="f">pregunta4</span>():
+    cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">        SELECT COUNT(*) AS total, AVG(cuota_mensual) AS media</span>
+<span class="s">        FROM socios WHERE actividad = 'Musculación'</span>
+<span class="s">    """</span>)
+    r = cursor.<span class="f">fetchone</span>()
+    <span class="b">print</span>(<span class="s">"Total:"</span>, r[<span class="s">"total"</span>])
+    <span class="b">print</span>(<span class="s">"Media:"</span>, <span class="b">round</span>(r[<span class="s">"media"</span>], <span class="n">2</span>), <span class="s">"€"</span>)
+
+<span class="c"># P5 · Insertar nueva socia (id se autogenera)</span>
+<span class="k">def</span> <span class="f">pregunta5</span>():
+    cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">        INSERT INTO socios (nombre, actividad, cuota_mensual, antiguedad_meses)</span>
+<span class="s">        VALUES (?, ?, ?, ?)</span>
+<span class="s">    """</span>, (<span class="s">"Elena Rodríguez"</span>, <span class="s">"Natación"</span>, <span class="n">45.50</span>, <span class="n">1</span>))
+    conexion.<span class="f">commit</span>()
+
+<span class="f">pregunta1</span>()
+<span class="f">pregunta2</span>()
+<span class="f">pregunta3</span>()
+<span class="f">pregunta4</span>()
+<span class="f">pregunta5</span>()
+
+cursor.<span class="f">close</span>()
+conexion.<span class="f">close</span>()</code></pre></div>
+      </div>
+    </div>
+
+    <!-- EJ POO 4 - FLOTA (examen difícil, todo junto) -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio poo dificil flota vehiculo coche moto furgoneta abstracta classmethod staticmethod isinstance cliente alquilar property setter completo todo junto">
+      <span class="tag">Ejercicio · POO · TECHO del examen</span>
+      <h3>9. Flota de vehículos (todo junto: abstracta + classmethod + staticmethod + isinstance)</h3>
+      <p>Clase abstracta <code>Vehiculo</code> con <code>_matricula</code> y property <code>precio_dia</code> (setter que no admita ≤ 0). Métodos abstractos <code>__str__</code> y <code>coste_alquiler(dias)</code>. Tres subclases (<code>Coche</code> +5€/día si GPS, <code>Moto</code> normal, <code>Furgoneta</code> +20% si carga &gt; 1000kg). Un <code>@classmethod flota_mas_cara</code>, un <code>@staticmethod es_matricula_valida</code>, y una clase <code>Cliente</code> que con <code>isinstance</code> no deje alquilar más de 2 furgonetas. Si resuelves esto, el examen te sobra.</p>
+      <button class="solution-toggle">Ver solución completa ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="k">from</span> abc <span class="k">import</span> <span class="f">ABC</span>, <span class="f">abstractmethod</span>
+
+<span class="k">class</span> <span class="f">Vehiculo</span>(<span class="f">ABC</span>):                       <span class="c"># clase abstracta (no instanciable)</span>
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, matricula, precio_dia):
+        <span class="b">self</span>._matricula = matricula        <span class="c"># protegido (_)</span>
+        <span class="b">self</span>.precio_dia = precio_dia       <span class="c"># pasa por el setter de abajo</span>
+
+    <span class="b">@property</span>                            <span class="c"># GETTER</span>
+    <span class="k">def</span> <span class="f">precio_dia</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="b">self</span>._precio_dia
+
+    <span class="b">@precio_dia.setter</span>                   <span class="c"># SETTER con validación</span>
+    <span class="k">def</span> <span class="f">precio_dia</span>(<span class="b">self</span>, valor):
+        <span class="k">if</span> valor &lt;= <span class="n">0</span>:
+            <span class="b">print</span>(<span class="s">"Precio no válido"</span>)
+        <span class="k">else</span>:
+            <span class="b">self</span>._precio_dia = valor
+
+    <span class="b">@abstractmethod</span>
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>): <span class="k">pass</span>          <span class="c"># cada hija lo define</span>
+
+    <span class="b">@abstractmethod</span>
+    <span class="k">def</span> <span class="f">coste_alquiler</span>(<span class="b">self</span>, dias): <span class="k">pass</span>
+
+    <span class="b">@classmethod</span>                         <span class="c"># opera sobre una LISTA</span>
+    <span class="k">def</span> <span class="f">flota_mas_cara</span>(<span class="b">cls</span>, lista):
+        <span class="k">return</span> <span class="b">max</span>(lista, key=<span class="k">lambda</span> v: v.precio_dia)
+
+    <span class="b">@staticmethod</span>                        <span class="c"># sin self ni cls</span>
+    <span class="k">def</span> <span class="f">es_matricula_valida</span>(matricula):
+        <span class="k">return</span> <span class="b">len</span>(matricula) == <span class="n">7</span>
+
+<span class="k">class</span> <span class="f">Coche</span>(<span class="f">Vehiculo</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, matricula, precio_dia, num_puertas, tiene_gps):
+        <span class="b">super</span>().<span class="f">__init__</span>(matricula, precio_dia)
+        <span class="b">self</span>.__num_puertas = num_puertas    <span class="c"># privado (__)</span>
+        <span class="b">self</span>.__tiene_gps = tiene_gps
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):
+        gps = <span class="s">"Sí"</span> <span class="k">if</span> <span class="b">self</span>.__tiene_gps <span class="k">else</span> <span class="s">"No"</span>
+        <span class="k">return</span> <span class="s">f"COCHE </span>{<span class="b">self</span>._matricula}<span class="s"> - </span>{<span class="b">self</span>.precio_dia}<span class="s">€/día - GPS: </span>{gps}<span class="s">"</span>
+    <span class="k">def</span> <span class="f">coste_alquiler</span>(<span class="b">self</span>, dias):
+        coste = <span class="b">self</span>.precio_dia * dias
+        <span class="k">if</span> <span class="b">self</span>.__tiene_gps:
+            coste += <span class="n">5</span> * dias               <span class="c"># +5€/día por GPS</span>
+        <span class="k">return</span> coste
+
+<span class="k">class</span> <span class="f">Moto</span>(<span class="f">Vehiculo</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, matricula, precio_dia, cilindrada):
+        <span class="b">super</span>().<span class="f">__init__</span>(matricula, precio_dia)
+        <span class="b">self</span>.__cilindrada = cilindrada
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="s">f"MOTO </span>{<span class="b">self</span>._matricula}<span class="s"> - </span>{<span class="b">self</span>.precio_dia}<span class="s">€/día - </span>{<span class="b">self</span>.__cilindrada}<span class="s">cc"</span>
+    <span class="k">def</span> <span class="f">coste_alquiler</span>(<span class="b">self</span>, dias):
+        <span class="k">return</span> <span class="b">self</span>.precio_dia * dias    <span class="c"># sin extras</span>
+
+<span class="k">class</span> <span class="f">Furgoneta</span>(<span class="f">Vehiculo</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, matricula, precio_dia, capacidad_carga):
+        <span class="b">super</span>().<span class="f">__init__</span>(matricula, precio_dia)
+        <span class="b">self</span>.__capacidad_carga = capacidad_carga
+    <span class="k">def</span> <span class="f">__str__</span>(<span class="b">self</span>):
+        <span class="k">return</span> <span class="s">f"FURGONETA </span>{<span class="b">self</span>._matricula}<span class="s"> - </span>{<span class="b">self</span>.precio_dia}<span class="s">€/día - </span>{<span class="b">self</span>.__capacidad_carga}<span class="s">kg"</span>
+    <span class="k">def</span> <span class="f">coste_alquiler</span>(<span class="b">self</span>, dias):
+        coste = <span class="b">self</span>.precio_dia * dias
+        <span class="k">if</span> <span class="b">self</span>.__capacidad_carga &gt; <span class="n">1000</span>:
+            coste = coste * <span class="n">1.20</span>          <span class="c"># +20% si carga > 1000kg</span>
+        <span class="k">return</span> coste
+
+<span class="k">class</span> <span class="f">Cliente</span>:                            <span class="c"># clase aparte que USA vehículos</span>
+    <span class="k">def</span> <span class="f">__init__</span>(<span class="b">self</span>, nombre):
+        <span class="b">self</span>.nombre = nombre
+        <span class="b">self</span>.alquilados = []
+    <span class="k">def</span> <span class="f">alquilar</span>(<span class="b">self</span>, vehiculo, dias):
+        n_furg = <span class="b">len</span>([v <span class="k">for</span> v <span class="k">in</span> <span class="b">self</span>.alquilados <span class="k">if</span> <span class="b">isinstance</span>(v, <span class="f">Furgoneta</span>)])
+        <span class="k">if</span> <span class="b">isinstance</span>(vehiculo, <span class="f">Furgoneta</span>) <span class="k">and</span> n_furg &gt;= <span class="n">2</span>:
+            <span class="b">print</span>(<span class="s">f"</span>{<span class="b">self</span>.nombre}<span class="s"> no puede alquilar más de 2 furgonetas."</span>)
+            <span class="k">return</span>
+        <span class="b">self</span>.alquilados.<span class="f">append</span>(vehiculo)
+        <span class="b">print</span>(<span class="s">f"</span>{<span class="b">self</span>.nombre}<span class="s"> alquila </span>{vehiculo._matricula}<span class="s">. Coste: </span>{vehiculo.<span class="f">coste_alquiler</span>(dias):.2f}<span class="s">€"</span>)
+
+<span class="c"># ---- PRUEBAS ----</span>
+flota = [<span class="f">Coche</span>(<span class="s">"1234ABC"</span>, <span class="n">40</span>, <span class="n">5</span>, <span class="k">True</span>), <span class="f">Moto</span>(<span class="s">"5678DEF"</span>, <span class="n">25</span>, <span class="n">600</span>), <span class="f">Furgoneta</span>(<span class="s">"9012GHI"</span>, <span class="n">60</span>, <span class="n">1500</span>)]
+<span class="k">for</span> v <span class="k">in</span> flota:
+    <span class="b">print</span>(v, <span class="s">"→"</span>, v.<span class="f">coste_alquiler</span>(<span class="n">3</span>))   <span class="c"># polimorfismo: cada uno calcula distinto</span>
+<span class="b">print</span>(<span class="f">Vehiculo</span>.<span class="f">flota_mas_cara</span>(flota)._matricula)
+<span class="b">print</span>(<span class="f">Vehiculo</span>.<span class="f">es_matricula_valida</span>(<span class="s">"1234ABC"</span>))   <span class="c"># True</span></code></pre></div>
+        <div class="keybox tip"><span class="label">Lo que da puntos de teoría</span>Comenta que <code>super().__init__()</code> inicializa los atributos del padre, y que el bucle final es <strong>polimorfismo</strong> (el mismo <code>coste_alquiler</code> se comporta distinto según el tipo de vehículo). Eso es justo lo que faltó el año pasado.</div>
+      </div>
+    </div>
+
+    <!-- EJ BD 6 - TIENDA VIDEOJUEGOS (las 5 preguntas tipo) -->
+    <div class="card exercise" data-cat="ej" data-keywords="ejercicio bd tienda videojuegos juegos plataforma switch ps5 pc create insert select update group by oferta stock cinco preguntas tipo examen completo">
+      <span class="tag solved">Examen tipo · tienda de videojuegos · resuelto</span>
+      <h3>10. Las 5 preguntas tipo (tienda de videojuegos)</h3>
+      <p>Tabla <code>juegos</code>: <code>id</code> (PK autoincrement), <code>titulo</code>, <code>plataforma</code>, <code>precio</code> (REAL), <code>stock</code> (INT), <code>oferta</code> (INT, 0/1 por defecto 0). Este es el patrón EXACTO que entra: crear con integridad, insertar con <code>?</code>, filtrar con WHERE+ORDER BY, actualizar y agrupar con GROUP BY.</p>
+      <button class="solution-toggle">Ver solución completa ▾</button>
+      <div class="solution">
+        <div class="codewrap"><pre><code><span class="k">import</span> sqlite3
+
+<span class="c"># P1 · CREAR TABLA con integridad</span>
+<span class="k">def</span> <span class="f">ejercicio1</span>():
+    conexion = sqlite3.<span class="f">connect</span>(<span class="s">"tienda.db"</span>)
+    cursor = conexion.<span class="f">cursor</span>()
+    cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">        CREATE TABLE IF NOT EXISTS juegos (</span>
+<span class="s">            id         INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s">            titulo     TEXT    NOT NULL,</span>
+<span class="s">            plataforma TEXT    NOT NULL,</span>
+<span class="s">            precio     REAL    NOT NULL,</span>
+<span class="s">            stock      INTEGER NOT NULL,</span>
+<span class="s">            oferta     INTEGER NOT NULL DEFAULT 0)</span>
+<span class="s">    """</span>)
+    <span class="c"># PRIMARY KEY → id único · NOT NULL → obligatorio · DEFAULT 0 → valor por defecto</span>
+    conexion.<span class="f">commit</span>()          <span class="c"># confirma (crea estructura)</span>
+    conexion.<span class="f">close</span>()
+
+<span class="c"># P2 · INSERTAR con parámetros ?</span>
+<span class="k">def</span> <span class="f">ejercicio2</span>():
+    conexion = sqlite3.<span class="f">connect</span>(<span class="s">"tienda.db"</span>)
+    cursor = conexion.<span class="f">cursor</span>()
+    juegos = [
+        (<span class="s">"Zelda TOTK"</span>, <span class="s">"Switch"</span>, <span class="n">59.99</span>, <span class="n">15</span>, <span class="n">0</span>),
+        (<span class="s">"Animal Crossing"</span>, <span class="s">"Switch"</span>, <span class="n">39.99</span>, <span class="n">8</span>, <span class="n">0</span>),
+        (<span class="s">"Mario Kart 8"</span>, <span class="s">"Switch"</span>, <span class="n">35.00</span>, <span class="n">20</span>, <span class="n">0</span>)]
+    <span class="c"># Los ? evitan inyección SQL: el valor entra como dato, nunca como código</span>
+    cursor.<span class="f">executemany</span>(<span class="s">"INSERT INTO juegos (titulo,plataforma,precio,stock,oferta) VALUES (?,?,?,?,?)"</span>, juegos)
+    conexion.<span class="f">commit</span>()          <span class="c"># OBLIGATORIO tras INSERT</span>
+    conexion.<span class="f">close</span>()
+
+<span class="c"># P3 · CONSULTAR con filtro (Switch < 40€, de barato a caro)</span>
+<span class="k">def</span> <span class="f">ejercicio3</span>():
+    conexion = sqlite3.<span class="f">connect</span>(<span class="s">"tienda.db"</span>)
+    cursor = conexion.<span class="f">cursor</span>()
+    cursor.<span class="f">execute</span>(<span class="s">"""</span>
+<span class="s">        SELECT titulo, precio FROM juegos</span>
+<span class="s">        WHERE plataforma = ? AND precio &lt; 40</span>
+<span class="s">        ORDER BY precio ASC</span>
+<span class="s">    """</span>, (<span class="s">"Switch"</span>,))      <span class="c"># tupla con coma ← OJO</span>
+    <span class="k">for</span> juego <span class="k">in</span> cursor.<span class="f">fetchall</span>():
+        <span class="b">print</span>(juego)
+    conexion.<span class="f">close</span>()          <span class="c"># SELECT: sin commit</span>
+
+<span class="c"># P4 · ACTUALIZAR (oferta=1 si stock>10)</span>
+<span class="k">def</span> <span class="f">ejercicio4</span>():
+    conexion = sqlite3.<span class="f">connect</span>(<span class="s">"tienda.db"</span>)
+    cursor = conexion.<span class="f">cursor</span>()
+    cursor.<span class="f">execute</span>(<span class="s">"UPDATE juegos SET oferta = ? WHERE stock &gt; ?"</span>, (<span class="n">1</span>, <span class="n">10</span>))
+    conexion.<span class="f">commit</span>()          <span class="c"># OBLIGATORIO tras UPDATE</span>
+    conexion.<span class="f">close</span>()
+
+<span class="c"># P5 · ESTADÍSTICAS (cuántos por plataforma)</span>
+<span class="k">def</span> <span class="f">ejercicio5</span>():
+    conexion = sqlite3.<span class="f">connect</span>(<span class="s">"tienda.db"</span>)
+    cursor = conexion.<span class="f">cursor</span>()
+    cursor.<span class="f">execute</span>(<span class="s">"SELECT plataforma, COUNT(*) FROM juegos GROUP BY plataforma"</span>)
+    <span class="k">for</span> juego <span class="k">in</span> cursor.<span class="f">fetchall</span>():
+        <span class="b">print</span>(juego)
+    conexion.<span class="f">close</span>()          <span class="c"># SELECT: sin commit</span>
+
+<span class="f">ejercicio1</span>(); <span class="f">ejercicio2</span>(); <span class="f">ejercicio3</span>(); <span class="f">ejercicio4</span>(); <span class="f">ejercicio5</span>()</code></pre></div>
+        <div class="keybox warn"><span class="label">Tus 3 fallos de hoy</span>1) Cerrar SIEMPRE el paréntesis del <code>CREATE TABLE</code>. 2) <code>juegos</code> no <code>juejos</code> (revisa cada nombre contra el CREATE). 3) El parámetro único va como tupla <code>("Switch",)</code> con la coma, nunca <code>"Switch"</code> suelto.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Chuleta de estudio · Fundamentos de Programación (DAM) · POO + Bases de datos</p>
+    <p style="margin-top:6px;color:var(--ink-dim)">Recuerda: comenta el código y menciona la integridad. ¡Suerte mañana! 🍀</p>
+  </footer>
+</div>
+
+<script>
+  // ===== COPY BUTTONS =====
+  document.querySelectorAll('pre').forEach(pre=>{
+    const wrap = pre.closest('.codewrap') || pre.parentElement;
+    const btn = document.createElement('button');
+    btn.className='copybtn';btn.textContent='Copiar';
+    if(getComputedStyle(wrap).position==='static') wrap.style.position='relative';
+    wrap.appendChild(btn);
+    btn.addEventListener('click',()=>{
+      const code = pre.querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(()=>{
+        btn.textContent='¡Copiado!';btn.classList.add('done');
+        setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('done')},1400);
+      });
+    });
+  });
+
+  // ===== SOLUTION TOGGLES =====
+  document.querySelectorAll('.solution-toggle').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const sol = btn.nextElementSibling;
+      const open = sol.classList.toggle('show');
+      btn.textContent = open ? 'Ocultar solución ▴' : (btn.textContent.includes('completa')?'Ver solución completa ▾':'Ver solución ▾');
+    });
+  });
+
+  // ===== TABS =====
+  const tabs = document.querySelectorAll('.tab');
+  const sections = document.querySelectorAll('.section');
+  tabs.forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      tabs.forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const cat = tab.dataset.tab;
+      document.getElementById('search').value='';
+      filterCards('');
+      sections.forEach(sec=>{
+        if(cat==='all'){sec.classList.remove('hidden');}
+        else{sec.classList.toggle('hidden', sec.dataset.cat!==cat);}
+      });
+      // ejercicios viven en su propia sección con data-cat="ej"
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+
+  // ===== SEARCH =====
+  const search = document.getElementById('search');
+  const noResults = document.getElementById('noResults');
+  function filterCards(q){
+    q = q.trim().toLowerCase();
+    const cards = document.querySelectorAll('.card');
+    let visible=0;
+    cards.forEach(card=>{
+      const kw = (card.dataset.keywords||'') + ' ' + card.innerText.toLowerCase();
+      const match = q==='' || kw.toLowerCase().includes(q);
+      card.style.display = match ? '' : 'none';
+      if(match) visible++;
+    });
+    // ocultar títulos de sección cuyo contenido esté todo oculto cuando hay búsqueda
+    sections.forEach(sec=>{
+      const anyVisible = [...sec.querySelectorAll('.card')].some(c=>c.style.display!=='none');
+      const titleEls = sec.querySelectorAll('.section-title, .section-lead');
+      if(q!==''){
+        sec.classList.remove('hidden');
+        titleEls.forEach(t=>t.style.display = anyVisible ? '' : 'none');
+      } else {
+        titleEls.forEach(t=>t.style.display='');
+      }
+    });
+    noResults.classList.toggle('show', visible===0 && q!=='');
+  }
+  search.addEventListener('input', e=>{
+    // al buscar, mostramos todas las secciones para buscar global
+    if(e.target.value.trim()!==''){
+      tabs.forEach(t=>t.classList.remove('active'));
+      tabs[0].classList.add('active');
+      sections.forEach(sec=>sec.classList.remove('hidden'));
+    }
+    filterCards(e.target.value);
+  });
+  search.addEventListener('keydown', e=>{
+    if(e.key==='Escape'){search.value='';filterCards('');}
+  });
+</script>
+</body>
+</html>

@@ -10,7 +10,7 @@ class Tripulante:
     def to_dict(self):
         return {'nombre':self.nombre,'rango':self.rango,'planeta_origen':self.planeta_origen,'años_experiencia':self.años_experiencia
         }
-    def __srt__(self):
+    def __str__(self):
         return f'{self.nombre}-{self.rango}-{self.planeta_origen}-{self.años_experiencia}'
 
 Tripulante1 = Tripulante("Zara Voss","Comandante","Kepler-22",12)
